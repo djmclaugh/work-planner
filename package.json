@@ -1,0 +1,46 @@
+{
+  "name": "work-planner",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Simple web app to plan your day and week.",
+  "scripts": {
+    "build-server": "tsc --p server",
+    "build-client": "tsc --p client && webpack",
+    "run-server": "npm run build-server && node server/main.js",
+    "start": "npm run build-client && npm run run-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djmclaugh/work-planner.git"
+  },
+  "author": "",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/djmclaugh/work-planner/issues"
+  },
+  "homepage": "https://github.com/djmclaugh/work-planner#readme",
+  "dependencies": {
+    "@koa/router": "^9.4.0",
+    "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-send": "^5.0.1",
+    "koa-static": "^5.0.0",
+    "sqlite3": "^5.0.0",
+    "typeorm": "^0.2.25",
+    "vue": "^2.6.12",
+    "vue-class-component": "^7.2.5",
+    "vue-router": "^3.4.3"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.11.4",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-send": "^4.1.2",
+    "@types/koa-static": "^4.0.1",
+    "@types/koa__router": "^8.0.2",
+    "json-schema-to-typescript": "^9.1.1",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  }
+}
