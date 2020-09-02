@@ -6,7 +6,7 @@ import { getConfig, ServerConfig } from '../config';
 const config: ServerConfig = getConfig().server;
 const client = config.https ? https : http;
 
-export function call(method: 'GET'|'POST'|'UPDATE'|'DELETE', path: string, req?: any): Promise<any> {
+export function call(method: 'GET'|'POST'|'PUT'|'DELETE', path: string, req?: any): Promise<any> {
   const promise: Promise<any> = new Promise((resolve, reject) => {
     const clientRequest = client.request({
       hostname: config.hostname,
@@ -52,8 +52,8 @@ export function post(path: string, req?: any): Promise<any> {
   return call('POST', path, req);
 }
 
-export function update(path: string, req?: any): Promise<any> {
-  return call('UPDATE', path, req);
+export function put(path: string, req?: any): Promise<any> {
+  return call('PUT', path, req);
 }
 
 // delete is a typescript keyword, so this method is called remove instead.
