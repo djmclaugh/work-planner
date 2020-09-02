@@ -18,7 +18,7 @@ export default class TaskModel extends BaseEntity {
 
   public async createLog(content: string): Promise<TaskUpdateModel> {
     const log = new TaskUpdateModel();
-    log.timestamp = new Date();
+    log.timestamp = (new Date()).toString();
     log.content = content;
     this.log.push(log);
     await this.save();
@@ -50,7 +50,7 @@ export class TaskUpdateModel extends BaseEntity {
   id!: number;
 
   @Column('datetime')
-  timestamp!: Date;
+  timestamp!: string;
 
   @Column('text')
   content!: string;

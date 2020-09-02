@@ -6,6 +6,6 @@ export interface Task {
 
 export interface TaskUpdate {
   id: number;
-  timestamp: Date;
+  timestamp: string;
   content: string;
 }
