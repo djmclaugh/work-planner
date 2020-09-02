@@ -1,8 +1,9 @@
 import { Connection, createConnection } from 'typeorm';
 
 import SampleModel from './sample_model';
+import TaskModel, { TaskUpdateModel } from './task_model';
 
-import { getConfig, Config } from '../config';
+import { getConfig } from '../config';
 
 const dbConfig = getConfig().database;
 let connection: Connection|null = null;
@@ -22,6 +23,8 @@ createConnection({
   database: dbConfig.location,
   entities: [
     SampleModel,
+    TaskModel,
+    TaskUpdateModel,
   ],
   synchronize: true,
 }).then(c => {
