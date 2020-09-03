@@ -10,15 +10,25 @@ export default class TaskModel extends BaseEntity {
   @Column('text')
   description!: string;
 
+  @Column('int')
+  startDate: number = 0;
+
+  @Column('int')
+  dueDate: number = 0;
+
+  @Column('int')
+  completionDate: number = 0;
+
   @OneToMany(() => TaskUpdateModel, taskUpdate => taskUpdate.task, {
     cascade: true,
+    onDelete: 'CASCADE',
     eager: true,
   })
   log!: TaskUpdateModel[];
 
   public async createLog(content: string): Promise<TaskUpdateModel> {
     const log = new TaskUpdateModel();
-    log.timestamp = (new Date()).toString();
+    log.timestamp = (new Date()).getTime();
     log.content = content;
     this.log.push(log);
     await this.save();
@@ -27,8 +37,17 @@ export default class TaskModel extends BaseEntity {
 
   public async update(draft: Partial<Task>): Promise<TaskModel> {
     // Ignore changes to the ID
-    if (draft.description) {
+    if (draft.description !== undefined) {
       this.description = draft.description;
+    }
+    if (draft.startDate !== undefined) {
+      this.startDate = draft.startDate;
+    }
+    if (draft.dueDate !== undefined) {
+      this.dueDate = draft.dueDate;
+    }
+    if (draft.completionDate !== undefined) {
+      this.completionDate = draft.completionDate;
     }
     // Ignore changes to log elements.
     return await this.save();
@@ -38,6 +57,9 @@ export default class TaskModel extends BaseEntity {
     return {
       id: this.id,
       description: this.description,
+      startDate: this.startDate,
+      dueDate: this.dueDate,
+      completionDate: this.completionDate,
       log: !this.log ? [] : this.log.map(log => log.sanitize()),
     }
   }
@@ -49,8 +71,8 @@ export class TaskUpdateModel extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column('datetime')
-  timestamp!: string;
+  @Column('int')
+  timestamp!: number;
 
   @Column('text')
   content!: string;
@@ -61,7 +83,7 @@ export class TaskUpdateModel extends BaseEntity {
   public async update(draft: Partial<TaskUpdate>): Promise<TaskUpdateModel> {
     // Ignore changes to the ID
     // Ignore changes to the timestamp
-    if (draft.content) {
+    if (draft.content !== undefined) {
       this.content = draft.content;
     }
     // Ignore changes to task.

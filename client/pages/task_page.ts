@@ -6,7 +6,10 @@ import TaskComponent from '../components/task_component';
 import { Task } from '../../shared/entities/task';
 import { getTask, updateTask, createLog } from '../services/task_service';
 
-function toString(timestamp: string) {
+function toString(timestamp: number) {
+  if (timestamp === 0) {
+    return "--";
+  }
   const date = new Date(timestamp);
   return date.toLocaleString();
 }
@@ -92,6 +95,19 @@ export default class LandingPage extends LandingPageProps {
     }
   }
 
+  private async complete(): Promise<void> {
+    if (!this.task) {
+      return;
+    }
+    try {
+      this.task = await updateTask(this.task.id, {
+        completionDate: (new Date()).getTime(),
+      });
+    } catch(e) {
+      this.error = e;
+    }
+  }
+
   // Hooks
   created() {
     this.fetchTask();
@@ -120,6 +136,14 @@ export default class LandingPage extends LandingPageProps {
           click: this.saveDescription,
         },
       }, 'save'));
+      elements.push(this.$createElement('p', 'Start Date: ' + toString(this.task.startDate)));
+      elements.push(this.$createElement('p', 'Due Date: ' + toString(this.task.dueDate)));
+      elements.push(this.$createElement('p', 'Completion Date: ' + toString(this.task.completionDate)));
+      elements.push(this.$createElement('button', {
+        on: {
+          click: this.complete,
+        },
+      }, 'Mark Completed'));
       elements.push(this.$createElement('h3', 'Updates'));
       for (let taskUpdate of this.task.log) {
         elements.push(this.$createElement('p', toString(taskUpdate.timestamp) + ": " + taskUpdate.content));
