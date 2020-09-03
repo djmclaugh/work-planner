@@ -20,10 +20,24 @@ export default class TaskComponent extends TaskProps {
     return this.taskProp as Task;
   }
 
+  get status(): string {
+    if (this.task.completionDate > 0) {
+      return 'Completed';
+    } else if (this.task.startDate > 0) {
+      return 'In Progress';
+    }
+    return 'Pending';
+  }
+
   // Methods
 
   // Hooks
   render(): VNode {
+    const elements: VNode[] = [];
+    elements.push(this.$createElement('b', this.task.description));
+    elements.push(this.$createElement('br'));
+    elements.push(this.$createElement('span', 'Status: ' + this.status));
+
     return this.$createElement('router-link', {
       class: {
         task: true,
@@ -31,6 +45,6 @@ export default class TaskComponent extends TaskProps {
       attrs: {
         to: "/task/" + this.task.id,
       },
-    }, this.task.description);
+    }, elements);
   }
 }

@@ -40,14 +40,19 @@ export default class LandingPage extends LandingPageProps {
 
   render(): VNode {
     const elements: VNode[] = [];
-    elements.push(this.$createElement('h2', 'Tasks:'));
-    elements.push(this.$createElement('button', {
+    const newTaskButton = this.$createElement('button', {
       on: {
         click: this.onNewTaskClick,
       }
-    }, 'New Task'));
+    }, 'New Task');
+    elements.push(this.$createElement('h2', ['Tasks: ', newTaskButton]));
+    elements.push(this.$createElement('br'));
     if (this.tasks) {
-      for (let task of this.tasks) {
+      for (let task of this.tasks.filter(task => task.completionDate === 0)) {
+        elements.push(this.$createElement('task', { props: {taskProp: task} }));
+      }
+      elements.push(this.$createElement('h2', 'Completed:'));
+      for (let task of this.tasks.filter(task => task.completionDate !== 0)) {
         elements.push(this.$createElement('task', { props: {taskProp: task} }));
       }
     } else {
