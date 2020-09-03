@@ -3,7 +3,7 @@ import Component from 'vue-class-component';
 
 import { Task } from '../../shared/entities/task';
 
-const SampleEntityProps = Vue.extend({
+const TaskProps = Vue.extend({
   props: {
     taskProp: Object,
   },
@@ -12,7 +12,7 @@ const SampleEntityProps = Vue.extend({
 @Component({
   components: {},
 })
-export default class SampleEntityComponent extends SampleEntityProps {
+export default class TaskComponent extends TaskProps {
   // Data
 
   // Computed
