@@ -1,7 +1,9 @@
 import { Connection, createConnection } from 'typeorm';
 
 import SampleModel from './sample_model';
+import DailySnippetModel from './daily_snippet_model';
 import TaskModel, { TaskUpdateModel } from './task_model';
+import WeeklySnippetModel from './weekly_snippet_model';
 
 import { getConfig } from '../config';
 
@@ -22,9 +24,11 @@ createConnection({
   type: dbConfig.type,
   database: dbConfig.location,
   entities: [
+    DailySnippetModel,
     SampleModel,
     TaskModel,
     TaskUpdateModel,
+    WeeklySnippetModel,
   ],
   synchronize: true,
 }).then(c => {
