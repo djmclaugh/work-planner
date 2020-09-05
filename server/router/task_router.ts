@@ -68,7 +68,7 @@ taskRouter.get(LOG_COLLECTION_PATH, async (ctx: Koa.Context) => {
 taskRouter.post(LOG_COLLECTION_PATH, async (ctx: Koa.Context) => {
   const body: Partial<TaskUpdate> = ctx.request.body;
   if (!body.content) {
-    ctx.status = 401;
+    ctx.status = 400;
     ctx.message = 'TaskUpdate.content must be non-null';
   }
   const result = await TaskModel.findOne(getTaskId(ctx));
