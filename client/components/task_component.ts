@@ -1,7 +1,7 @@
 import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
-import { Task } from '../../shared/entities/task';
+import { Task, status } from '../../shared/entities/task';
 
 const TaskProps = Vue.extend({
   props: {
@@ -16,17 +16,8 @@ export default class TaskComponent extends TaskProps {
   // Data
 
   // Computed
-  get task(): Task {
+  public get task(): Task {
     return this.taskProp as Task;
-  }
-
-  get status(): string {
-    if (this.task.completionDate > 0) {
-      return 'Completed';
-    } else if (this.task.startDate > 0) {
-      return 'In Progress';
-    }
-    return 'Pending';
   }
 
   // Methods
@@ -36,7 +27,7 @@ export default class TaskComponent extends TaskProps {
     const elements: VNode[] = [];
     elements.push(this.$createElement('b', this.task.description));
     elements.push(this.$createElement('br'));
-    elements.push(this.$createElement('span', 'Status: ' + this.status));
+    elements.push(this.$createElement('span', 'Status: ' + status(this.task)));
 
     return this.$createElement('router-link', {
       class: {
