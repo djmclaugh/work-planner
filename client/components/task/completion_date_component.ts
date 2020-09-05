@@ -49,16 +49,16 @@ export default class CompletionDateComponent extends CompletionDateProps {
     this.setCompletionDate(0);
   }
 
-  private setCustomDate() {
-    const datePicker = this.$refs.datePicker;
-    const chosenDate = new Date(datePicker.value + "T00:00");
-    this.setCompletionDate(chosenDate.getTime());
-  }
-
-  private onPickerUpdate() {
-    const datePicker = this.$refs.datePicker;
-    this.$refs.setDateButton.disabled = (datePicker.value === "");
-  }
+  // private setCustomDate() {
+  //   const datePicker = this.$refs.datePicker;
+  //   const chosenDate = new Date(datePicker.value + "T00:00");
+  //   this.setCompletionDate(chosenDate.getTime());
+  // }
+  //
+  // private onPickerUpdate() {
+  //   const datePicker = this.$refs.datePicker;
+  //   this.$refs.setDateButton.disabled = (datePicker.value === "");
+  // }
 
   // Hooks
   render(): VNode {
@@ -77,26 +77,27 @@ export default class CompletionDateComponent extends CompletionDateProps {
         },
       }, 'Reopen'));
     }
-    elements.push(this.$createElement('br'));
-    elements.push(this.$createElement('input', {
-      ref: 'datePicker',
-      attrs: {
-        id: 'completion-date-picker',
-        type: 'date'
-      },
-      on: {
-        change: this.onPickerUpdate,
-      },
-    }));
-    elements.push(this.$createElement('button', {
-      attrs: {
-        disabled: true,
-      },
-      ref: 'setDateButton',
-      on: {
-        click: this.setCustomDate,
-      },
-    }, 'Set Completion Date'));
+
+    // elements.push(this.$createElement('br'));
+    // elements.push(this.$createElement('input', {
+    //   ref: 'datePicker',
+    //   attrs: {
+    //     id: 'completion-date-picker',
+    //     type: 'date'
+    //   },
+    //   on: {
+    //     change: this.onPickerUpdate,
+    //   },
+    // }));
+    // elements.push(this.$createElement('button', {
+    //   attrs: {
+    //     disabled: true,
+    //   },
+    //   ref: 'setDateButton',
+    //   on: {
+    //     click: this.setCustomDate,
+    //   },
+    // }, 'Set Completion Date'));
 
     return this.$createElement('div', elements);
   }

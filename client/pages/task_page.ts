@@ -2,6 +2,8 @@ import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
 import CompletionDateComponent from '../components/task/completion_date_component';
+import DueDateComponent from '../components/task/due_date_component';
+import StartDateComponent from '../components/task/start_date_component';
 
 import { Task } from '../../shared/entities/task';
 import { getTask, updateTask, createLog } from '../services/task_service';
@@ -21,6 +23,8 @@ const LandingPageProps = Vue.extend({
 @Component({
   components: {
     completion: CompletionDateComponent,
+    due: DueDateComponent,
+    start: StartDateComponent,
   },
 })
 export default class LandingPage extends LandingPageProps {
@@ -103,6 +107,18 @@ export default class LandingPage extends LandingPageProps {
     this.error = error;
   }
 
+  private taskComponentOptions() {
+    return {
+      on: {
+        update: this.onUpdate,
+        error: this.onError,
+      },
+      props: {
+        taskProp: this.task,
+      },
+    };
+  }
+
   // Hooks
   created() {
     this.fetchTask();
@@ -131,17 +147,9 @@ export default class LandingPage extends LandingPageProps {
           click: this.saveDescription,
         },
       }, 'save'));
-      elements.push(this.$createElement('p', 'Start Date: ' + toString(this.task.startDate)));
-      elements.push(this.$createElement('p', 'Due Date: ' + toString(this.task.dueDate)));
-      elements.push(this.$createElement('completion', {
-        on: {
-          update: this.onUpdate,
-          error: this.onError,
-        },
-        props: {
-          taskProp: this.task,
-        },
-      }));
+      elements.push(this.$createElement('start', this.taskComponentOptions()));
+      elements.push(this.$createElement('due', this.taskComponentOptions()));
+      elements.push(this.$createElement('completion', this.taskComponentOptions()));
       elements.push(this.$createElement('h3', 'Updates'));
       for (let taskUpdate of this.task.log) {
         elements.push(this.$createElement('p', toString(taskUpdate.timestamp) + ": " + taskUpdate.content));
