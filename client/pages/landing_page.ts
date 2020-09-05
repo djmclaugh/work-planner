@@ -40,12 +40,6 @@ export default class LandingPage extends LandingPageProps {
     this.fetchTasks();
   }
 
-  private onNewTaskNameKeyUp(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      this.onNewTaskClick();
-    }
-  }
-
   taskToComponent(task: Task): VNode {
     return this.$createElement('task', { props: {taskProp: task} })
   }
@@ -57,66 +51,14 @@ export default class LandingPage extends LandingPageProps {
 
   render(): VNode {
     let elements: VNode[] = [];
-    elements.push(this.$createElement('input', {
-      ref: 'newTaskName',
-      attrs: {
-        id: 'newTaskName',
-        type: 'text',
-        placeholder: "Task Name",
-      },
-      on: {
-        keyup: this.onNewTaskNameKeyUp,
-      },
-    }));
-    const newTaskButton = this.$createElement('button', {
-      on: {
-        click: this.onNewTaskClick,
-      }
-    }, 'Create New Task');
-    elements.push(newTaskButton);
+    elements.push(this.$createElement('h1', 'Home'));
+
     if (this.tasks) {
-      const pendingTasks: Task[] = [];
-      const overdueTasks: Task[] = [];
-      const inProgressTasks: Task[] = [];
-      const completedTasks: Task[] = [];
-
-      for (let task of this.tasks) {
-        switch(status(task)) {
-          case "Pending":
-            pendingTasks.push(task);
-            break;
-          case "Overdue":
-            overdueTasks.push(task);
-            break;
-          case "Completed":
-            completedTasks.push(task);
-            break;
-          case "In Progress":
-            inProgressTasks.push(task);
-            break;
-          default:
-            pendingTasks.push(task);
-        }
-      }
-
-      if (overdueTasks.length > 0) {
-        elements.push(this.$createElement('h2', 'Overdue:'));
-        elements = elements.concat(overdueTasks.map(this.taskToComponent));
-      }
-
-      if (inProgressTasks.length > 0) {
-        elements.push(this.$createElement('h2', 'In Progress:'));
-        elements = elements.concat(inProgressTasks.map(this.taskToComponent));
-      }
-
-      if (pendingTasks.length > 0) {
-        elements.push(this.$createElement('h2', 'Pending:'));
-        elements = elements.concat(pendingTasks.map(this.taskToComponent));
-      }
-
-      if (completedTasks.length > 0) {
-        elements.push(this.$createElement('h2', 'Completed:'));
-        elements = elements.concat(completedTasks.map(this.taskToComponent));
+      const relevantTasks =
+          this.tasks.filter(t => status(t) == "In Progress" || status(t) == "Overdue");
+      if (relevantTasks.length > 0) {
+        elements.push(this.$createElement('h2', 'Tasks:'));
+        elements = elements.concat(relevantTasks.map(this.taskToComponent));
       }
     } else {
       elements.push(this.$createElement('p', 'Loading Tasks...'));

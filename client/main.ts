@@ -6,6 +6,7 @@ import NavigationComponent from './components/navigation_component';
 import NotFoundPage from './pages/not_found_page';
 import LandingPage from './pages/landing_page';
 import TaskPage from './pages/task_page';
+import TasksPage from './pages/tasks_page';
 
 Vue.use(VueRouter);
 
@@ -13,7 +14,7 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     { path: '/', component: LandingPage },
-    { path: '/task', component: LandingPage },
+    { path: '/task', component: TasksPage },
     { path: '/task/:taskId', component: TaskPage },
     { path: '*', component: NotFoundPage },
   ],
