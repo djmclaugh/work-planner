@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import NavigationComponent from './components/navigation_component';
 
+import DailySnippetPage from './pages/daily_snippet_page';
 import DailySnippetsPage from './pages/daily_snippets_page';
 import NotFoundPage from './pages/not_found_page';
 import LandingPage from './pages/landing_page';
@@ -16,6 +17,7 @@ const router = new VueRouter({
   routes: [
     { path: '/', component: LandingPage },
     { path: '/daily', component: DailySnippetsPage },
+    { path: '/daily/:snippetId', component: DailySnippetPage },
     { path: '/task', component: TasksPage },
     { path: '/task/:taskId', component: TaskPage },
     { path: '*', component: NotFoundPage },

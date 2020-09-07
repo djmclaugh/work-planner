@@ -1,8 +1,13 @@
 import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
-import { DailySnippet } from '../../shared/entities/snippet';
+import { DailySnippet, convertDateToDay, convertDayToDate } from '../../shared/entities/snippet';
 import { getDailySnippets, createDailySnippet } from '../services/daily_snippet_service';
+
+function toDateString(snippet: DailySnippet) {
+  const date = convertDayToDate(snippet.day, snippet.year);
+  return date.toLocaleDateString();
+}
 
 const TasksPageProps = Vue.extend({
   props: {},
@@ -29,7 +34,12 @@ export default class TasksPage extends TasksPageProps {
   }
 
   async onNewSnippetClick(): Promise<void> {
-    // TODO
+    const now = new Date();
+    await createDailySnippet({
+      day: convertDateToDay(now),
+      year: now.getFullYear(),
+    });
+    this.fetchSnippets();
   }
 
   // Hooks
@@ -45,10 +55,20 @@ export default class TasksPage extends TasksPageProps {
         click: this.onNewSnippetClick,
       }
     }, 'Create Today\'s Snippet');
-    elements.push(newTaskButton);
+
     if (this.snippets) {
+      const now = new Date();
+      const thisDay = convertDateToDay(now);
+      const thisYear = now.getFullYear();
+      if (!this.snippets.find(s => s.day == thisDay && s.year == thisYear)) {
+        elements.push(newTaskButton);
+      }
       for (let snippet of this.snippets) {
-        elements.push(this.$createElement('p', snippet.day + ': ' + snippet.snippet))
+        elements.push(this.$createElement('router-link', {
+          attrs: {
+            to: "/daily/" + snippet.id,
+          },
+        }, toDateString(snippet) + ': ' + (snippet.snippet ? snippet.snippet : "* New *")))
       }
     } else {
       elements.push(this.$createElement('p', 'Loading Daily Snippets...'));

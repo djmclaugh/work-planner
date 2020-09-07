@@ -24,6 +24,9 @@ dailySnippetRouter.post(COLLECTION_PATH, async (ctx: Koa.Context) => {
   if (!draft.day || !draft.year) {
     ctx.status = 400;
     ctx.message = 'DailySnippet.day and DailySnippet.year must be non-null';
+  } else {
+    result.day = draft.day;
+    result.year = draft.year;
   }
   await result.save();
   ctx.body = result.sanitize();
