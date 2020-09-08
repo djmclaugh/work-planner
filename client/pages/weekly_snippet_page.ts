@@ -1,29 +1,24 @@
 import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
-import { DailySnippet, convertDayToDate } from '../../shared/entities/snippet';
-import { getDailySnippet, updateDailySnippet } from '../services/daily_snippet_service';
+import { WeeklySnippet } from '../../shared/entities/snippet';
+import { getWeeklySnippet, updateWeeklySnippet } from '../services/weekly_snippet_service';
 
-function toDateString(snippet: DailySnippet) {
-  const date = convertDayToDate(snippet.day, snippet.year);
-  return date.toLocaleDateString();
-}
-
-const DailySnippetPageProps = Vue.extend({
+const WeeklySnippetPageProps = Vue.extend({
   props: {},
 });
 
 @Component({
   components: {},
 })
-export default class DailySnippetPage extends DailySnippetPageProps {
+export default class WeeklySnippetPage extends WeeklySnippetPageProps {
   // $refs override
   $refs!: {
     content: HTMLInputElement,
   }
 
   // Data
-  snippet: DailySnippet|null = null;
+  snippet: WeeklySnippet|null = null;
   error: Error|null = null;
 
   // Computed
@@ -31,7 +26,7 @@ export default class DailySnippetPage extends DailySnippetPageProps {
   // Methods
   private async fetchSnippet(): Promise<void> {
     try {
-      this.snippet = await getDailySnippet(parseInt(this.$route.params.snippetId));
+      this.snippet = await getWeeklySnippet(parseInt(this.$route.params.snippetId));
     } catch (e) {
       this.error = e;
     }
@@ -45,7 +40,7 @@ export default class DailySnippetPage extends DailySnippetPageProps {
     contentInput.disabled = true;
     if (contentInput.value !== this.snippet.snippet) {
       try {
-        this.snippet = await updateDailySnippet(this.snippet.id, {
+        this.snippet = await updateWeeklySnippet(this.snippet.id, {
           snippet: contentInput.value,
         });
       } catch(e) {
@@ -63,7 +58,7 @@ export default class DailySnippetPage extends DailySnippetPageProps {
   render(): VNode {
     const elements: VNode[] = [];
     if (this.snippet) {
-      elements.push(this.$createElement('h2', "Daily Snippet: " + toDateString(this.snippet)));
+      elements.push(this.$createElement('h2', "Weekly Snippet: Week " + this.snippet.week));
       elements.push(this.$createElement('textarea', {
         ref: 'content',
         attrs: {

@@ -9,6 +9,8 @@ import NotFoundPage from './pages/not_found_page';
 import LandingPage from './pages/landing_page';
 import TaskPage from './pages/task_page';
 import TasksPage from './pages/tasks_page';
+import WeeklySnippetPage from './pages/weekly_snippet_page';
+import WeeklySnippetsPage from './pages/weekly_snippets_page';
 
 Vue.use(VueRouter);
 
@@ -20,6 +22,8 @@ const router = new VueRouter({
     { path: '/daily/:snippetId', component: DailySnippetPage },
     { path: '/task', component: TasksPage },
     { path: '/task/:taskId', component: TaskPage },
+    { path: '/weekly', component: WeeklySnippetsPage },
+    { path: '/weekly/:snippetId', component: WeeklySnippetPage },
     { path: '*', component: NotFoundPage },
   ],
 });

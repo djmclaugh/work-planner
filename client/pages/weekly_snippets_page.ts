@@ -1,42 +1,37 @@
 import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
-import { DailySnippet, convertDateToDay, convertDayToDate } from '../../shared/entities/snippet';
-import { getDailySnippets, createDailySnippet } from '../services/daily_snippet_service';
+import { WeeklySnippet, convertDateToWeek } from '../../shared/entities/snippet';
+import { getWeeklySnippets, createWeeklySnippet } from '../services/weekly_snippet_service';
 
-function toDateString(snippet: DailySnippet) {
-  const date = convertDayToDate(snippet.day, snippet.year);
-  return date.toLocaleDateString();
-}
-
-const DailySnippetsPageProps = Vue.extend({
+const WeeklySnippetsPageProps = Vue.extend({
   props: {},
 });
 
 @Component({
   components: {},
 })
-export default class TasksPage extends DailySnippetsPageProps {
+export default class TasksPage extends WeeklySnippetsPageProps {
   // Data
-  snippets: DailySnippet[]|null = null;
+  snippets: WeeklySnippet[]|null = null;
 
   // Computed
 
   // Methods
   async fetchSnippets(): Promise<void> {
-    this.snippets = await getDailySnippets();
+    this.snippets = await getWeeklySnippets();
     this.snippets.sort((a, b) => {
       if (a.year != b.year) {
         return b.year - a.year;
       }
-      return b.day - a.day;
+      return b.week - a.week;
     })
   }
 
   async onNewSnippetClick(): Promise<void> {
     const now = new Date();
-    await createDailySnippet({
-      day: convertDateToDay(now),
+    await createWeeklySnippet({
+      week: convertDateToWeek(now),
       year: now.getFullYear(),
     });
     this.fetchSnippets();
@@ -49,31 +44,31 @@ export default class TasksPage extends DailySnippetsPageProps {
 
   render(): VNode {
     let elements: VNode[] = [];
-    elements.push(this.$createElement('h1', 'Daily Snippets'));
+    elements.push(this.$createElement('h1', 'Weekly Snippets'));
     const newTaskButton = this.$createElement('button', {
       on: {
         click: this.onNewSnippetClick,
       }
-    }, 'Create Today\'s Snippet');
+    }, 'Create This Week\'s Snippet');
 
     if (this.snippets) {
       const now = new Date();
-      const thisDay = convertDateToDay(now);
+      const thisWeek = convertDateToWeek(now);
       const thisYear = now.getFullYear();
-      if (!this.snippets.find(s => s.day == thisDay && s.year == thisYear)) {
+      if (!this.snippets.find(s => s.week == thisWeek && s.year == thisYear)) {
         elements.push(newTaskButton);
         elements.push(this.$createElement('br'));
       }
       for (let snippet of this.snippets) {
         elements.push(this.$createElement('router-link', {
           attrs: {
-            to: "/daily/" + snippet.id,
+            to: "/weekly/" + snippet.id,
           },
-        }, toDateString(snippet) + ': ' + (snippet.snippet ? snippet.snippet : "* New *")))
+        }, 'Week ' + snippet.week + ': ' + (snippet.snippet ? snippet.snippet : "* New *")))
         elements.push(this.$createElement('br'));
       }
     } else {
-      elements.push(this.$createElement('p', 'Loading Daily Snippets...'));
+      elements.push(this.$createElement('p', 'Loading Weekly Snippets...'));
     }
 
     return this.$createElement('div', elements);

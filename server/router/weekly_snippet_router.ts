@@ -24,6 +24,9 @@ weeklySnippetRouter.post(COLLECTION_PATH, async (ctx: Koa.Context) => {
   if (!draft.week || !draft.year) {
     ctx.status = 400;
     ctx.message = 'WeeklySnippet.week and WeeklySnippet.year must be non-null';
+  } else {
+    result.week = draft.week;
+    result.year = draft.year;
   }
   await result.save();
   ctx.body = result.sanitize();
