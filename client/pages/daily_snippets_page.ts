@@ -1,22 +1,21 @@
 import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
-import { DailySnippet, convertDateToDay, convertDayToDate } from '../../shared/entities/snippet';
+import DailySnippetComponent from "../components/snippet/daily_snippet_component";
+
+import { DailySnippet, convertDateToDay } from '../../shared/entities/snippet';
 import DailySnippetModel from '../models/daily_snippet_model';
 
 const dailySnippetModel = DailySnippetModel.getSingleton();
-
-function toDateString(snippet: DailySnippet) {
-  const date = convertDayToDate(snippet.day, snippet.year);
-  return date.toLocaleDateString();
-}
 
 const DailySnippetsPageProps = Vue.extend({
   props: {},
 });
 
 @Component({
-  components: {},
+  components: {
+    daily: DailySnippetComponent,
+  },
 })
 export default class TasksPage extends DailySnippetsPageProps {
   // Data
@@ -67,11 +66,7 @@ export default class TasksPage extends DailySnippetsPageProps {
         elements.push(this.$createElement('br'));
       }
       for (let snippet of this.snippets) {
-        elements.push(this.$createElement('router-link', {
-          attrs: {
-            to: "/daily/" + snippet.id,
-          },
-        }, toDateString(snippet) + ': ' + (snippet.snippet ? snippet.snippet : "* New *")))
+        elements.push(this.$createElement('daily', { props: {dailySnippetProp: snippet}}));
         elements.push(this.$createElement('br'));
       }
     } else {

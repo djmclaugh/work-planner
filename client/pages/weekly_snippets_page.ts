@@ -1,6 +1,8 @@
 import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
+import WeeklySnippetComponent from "../components/snippet/weekly_snippet_component";
+
 import { WeeklySnippet, convertDateToWeek } from '../../shared/entities/snippet';
 import WeeklySnippetModel from '../models/weekly_snippet_model';
 
@@ -11,7 +13,9 @@ const WeeklySnippetsPageProps = Vue.extend({
 });
 
 @Component({
-  components: {},
+  components: {
+    weekly: WeeklySnippetComponent,
+  },
 })
 export default class TasksPage extends WeeklySnippetsPageProps {
   // Data
@@ -62,11 +66,7 @@ export default class TasksPage extends WeeklySnippetsPageProps {
         elements.push(this.$createElement('br'));
       }
       for (let snippet of this.snippets) {
-        elements.push(this.$createElement('router-link', {
-          attrs: {
-            to: "/weekly/" + snippet.id,
-          },
-        }, 'Week ' + snippet.week + ': ' + (snippet.snippet ? snippet.snippet : "* New *")))
+        elements.push(this.$createElement('weekly', { props: {weeklySnippetProp: snippet} }));
         elements.push(this.$createElement('br'));
       }
     } else {
