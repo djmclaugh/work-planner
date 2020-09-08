@@ -6,7 +6,9 @@ import DueDateComponent from '../components/task/due_date_component';
 import StartDateComponent from '../components/task/start_date_component';
 
 import { Task } from '../../shared/entities/task';
-import { getTask, updateTask, createLog } from '../services/task_service';
+import TaskModel from '../models/task_model';
+
+const taskModel = TaskModel.getSingleton();
 
 function toString(timestamp: number) {
   if (timestamp === 0) {
@@ -43,7 +45,7 @@ export default class LandingPage extends LandingPageProps {
   // Methods
   private async fetchTask(): Promise<void> {
     try {
-      this.task = await getTask(parseInt(this.$route.params.taskId));
+      this.task = await taskModel.getTask(parseInt(this.$route.params.taskId));
     } catch (e) {
       this.error = e;
     }
@@ -57,7 +59,7 @@ export default class LandingPage extends LandingPageProps {
     descriptionInput.disabled = true;
     if (descriptionInput.value !== this.task.description) {
       try {
-        this.task = await updateTask(this.task.id, {
+        this.task = await taskModel.updateTask(this.task.id, {
           description: descriptionInput.value,
         });
       } catch(e) {
@@ -81,7 +83,7 @@ export default class LandingPage extends LandingPageProps {
     updateInput.disabled = true;
     if (updateInput.value.length > 0) {
       try {
-        await createLog(this.task.id, {
+        await taskModel.createLog(this.task.id, {
           content: updateInput.value,
         });
       } catch(e) {

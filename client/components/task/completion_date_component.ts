@@ -4,7 +4,9 @@ import Component from 'vue-class-component';
 import { timestampToDate } from '../../util/time';
 
 import { Task } from '../../../shared/entities/task';
-import { updateTask } from '../../services/task_service';
+import TaskModel from '../../models/task_model';
+
+const taskModel = TaskModel.getSingleton();
 
 const CompletionDateProps = Vue.extend({
   props: {
@@ -32,7 +34,7 @@ export default class CompletionDateComponent extends CompletionDateProps {
   // Methods
   private async setCompletionDate(date: number): Promise<void> {
     try {
-      const result = await updateTask(this.task.id, {
+      const result = await taskModel.updateTask(this.task.id, {
         completionDate: date,
       });
       this.$emit('update', result);

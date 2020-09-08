@@ -2,7 +2,9 @@ import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
 import { DailySnippet, convertDayToDate } from '../../shared/entities/snippet';
-import { getDailySnippet, updateDailySnippet } from '../services/daily_snippet_service';
+import DailySnippetModel from '../models/daily_snippet_model';
+
+const dailySnippetModel = DailySnippetModel.getSingleton();
 
 function toDateString(snippet: DailySnippet) {
   const date = convertDayToDate(snippet.day, snippet.year);
@@ -31,7 +33,8 @@ export default class DailySnippetPage extends DailySnippetPageProps {
   // Methods
   private async fetchSnippet(): Promise<void> {
     try {
-      this.snippet = await getDailySnippet(parseInt(this.$route.params.snippetId));
+      this.snippet =
+          await dailySnippetModel.getDailySnippet(parseInt(this.$route.params.snippetId));
     } catch (e) {
       this.error = e;
     }
@@ -45,7 +48,7 @@ export default class DailySnippetPage extends DailySnippetPageProps {
     contentInput.disabled = true;
     if (contentInput.value !== this.snippet.snippet) {
       try {
-        this.snippet = await updateDailySnippet(this.snippet.id, {
+        this.snippet = await dailySnippetModel.updateDailySnippet(this.snippet.id, {
           snippet: contentInput.value,
         });
       } catch(e) {

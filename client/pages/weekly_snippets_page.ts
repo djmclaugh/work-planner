@@ -2,7 +2,9 @@ import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
 import { WeeklySnippet, convertDateToWeek } from '../../shared/entities/snippet';
-import { getWeeklySnippets, createWeeklySnippet } from '../services/weekly_snippet_service';
+import WeeklySnippetModel from '../models/weekly_snippet_model';
+
+const weeklySnippetModel = WeeklySnippetModel.getSingleton();
 
 const WeeklySnippetsPageProps = Vue.extend({
   props: {},
@@ -19,7 +21,7 @@ export default class TasksPage extends WeeklySnippetsPageProps {
 
   // Methods
   async fetchSnippets(): Promise<void> {
-    this.snippets = await getWeeklySnippets();
+    this.snippets = await weeklySnippetModel.getWeeklySnippets();
     this.snippets.sort((a, b) => {
       if (a.year != b.year) {
         return b.year - a.year;
@@ -30,7 +32,7 @@ export default class TasksPage extends WeeklySnippetsPageProps {
 
   async onNewSnippetClick(): Promise<void> {
     const now = new Date();
-    await createWeeklySnippet({
+    await weeklySnippetModel.createWeeklySnippet({
       week: convertDateToWeek(now),
       year: now.getFullYear(),
     });

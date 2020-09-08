@@ -2,7 +2,9 @@ import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
 import { WeeklySnippet } from '../../shared/entities/snippet';
-import { getWeeklySnippet, updateWeeklySnippet } from '../services/weekly_snippet_service';
+import WeeklySnippetModel from '../models/weekly_snippet_model';
+
+const weeklySnippetModel = WeeklySnippetModel.getSingleton();
 
 const WeeklySnippetPageProps = Vue.extend({
   props: {},
@@ -26,7 +28,8 @@ export default class WeeklySnippetPage extends WeeklySnippetPageProps {
   // Methods
   private async fetchSnippet(): Promise<void> {
     try {
-      this.snippet = await getWeeklySnippet(parseInt(this.$route.params.snippetId));
+      this.snippet =
+          await weeklySnippetModel.getWeeklySnippet(parseInt(this.$route.params.snippetId));
     } catch (e) {
       this.error = e;
     }
@@ -40,7 +43,7 @@ export default class WeeklySnippetPage extends WeeklySnippetPageProps {
     contentInput.disabled = true;
     if (contentInput.value !== this.snippet.snippet) {
       try {
-        this.snippet = await updateWeeklySnippet(this.snippet.id, {
+        this.snippet = await weeklySnippetModel.updateWeeklySnippet(this.snippet.id, {
           snippet: contentInput.value,
         });
       } catch(e) {

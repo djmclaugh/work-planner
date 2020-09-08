@@ -4,7 +4,9 @@ import Component from 'vue-class-component';
 import TaskComponent from '../components/task_component';
 
 import { Task, status } from '../../shared/entities/task';
-import { getTasks, createTask } from '../services/task_service';
+import TaskModel from '../models/task_model';
+
+const taskModel = TaskModel.getSingleton();
 
 const TasksPageProps = Vue.extend({
   props: {},
@@ -28,12 +30,12 @@ export default class TasksPage extends TasksPageProps {
 
   // Methods
   async fetchTasks(): Promise<void> {
-    this.tasks = await getTasks();
+    this.tasks = await taskModel.getTasks();
   }
 
   async onNewTaskClick(): Promise<void> {
     const newTaskNameInput = this.$refs.newTaskName;
-    await createTask({
+    await taskModel.createTask({
       description: newTaskNameInput.value.length === 0 ? "New Task" : newTaskNameInput.value,
     });
     newTaskNameInput.value = "";

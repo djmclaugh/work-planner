@@ -2,7 +2,9 @@ import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
 import { DailySnippet, convertDateToDay, convertDayToDate } from '../../shared/entities/snippet';
-import { getDailySnippets, createDailySnippet } from '../services/daily_snippet_service';
+import DailySnippetModel from '../models/daily_snippet_model';
+
+const dailySnippetModel = DailySnippetModel.getSingleton();
 
 function toDateString(snippet: DailySnippet) {
   const date = convertDayToDate(snippet.day, snippet.year);
@@ -24,7 +26,7 @@ export default class TasksPage extends DailySnippetsPageProps {
 
   // Methods
   async fetchSnippets(): Promise<void> {
-    this.snippets = await getDailySnippets();
+    this.snippets = await dailySnippetModel.getDailySnippets();
     this.snippets.sort((a, b) => {
       if (a.year != b.year) {
         return b.year - a.year;
@@ -35,7 +37,7 @@ export default class TasksPage extends DailySnippetsPageProps {
 
   async onNewSnippetClick(): Promise<void> {
     const now = new Date();
-    await createDailySnippet({
+    await dailySnippetModel.createDailySnippet({
       day: convertDateToDay(now),
       year: now.getFullYear(),
     });
