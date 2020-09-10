@@ -4,24 +4,24 @@ import Component from 'vue-class-component';
 import { DailySnippet, convertDayToDate } from '../../shared/entities/snippet';
 import DailySnippetModel from '../models/daily_snippet_model';
 
-const dailySnippetModel = DailySnippetModel.getSingleton();
+import SnippetEditorComponent from '../components/snippet/snippet_editor';
+import { toRelativeDate } from '../util/time';
 
-function toDateString(snippet: DailySnippet) {
-  const date = convertDayToDate(snippet.day, snippet.year);
-  return date.toLocaleDateString();
-}
+const dailySnippetModel = DailySnippetModel.getSingleton();
 
 const DailySnippetPageProps = Vue.extend({
   props: {},
 });
 
 @Component({
-  components: {},
+  components: {
+    editor: SnippetEditorComponent,
+  },
 })
 export default class DailySnippetPage extends DailySnippetPageProps {
   // $refs override
   $refs!: {
-    content: HTMLInputElement,
+    editor: SnippetEditorComponent,
   }
 
   // Data
@@ -40,22 +40,18 @@ export default class DailySnippetPage extends DailySnippetPageProps {
     }
   }
 
-  private async saveContent(): Promise<void> {
+  private async save(newSnippet: string): Promise<void> {
     if (!this.snippet) {
       return;
     }
-    const contentInput = this.$refs.content;
-    contentInput.disabled = true;
-    if (contentInput.value !== this.snippet.snippet) {
-      try {
-        this.snippet = await dailySnippetModel.updateDailySnippet(this.snippet.id, {
-          snippet: contentInput.value,
-        });
-      } catch(e) {
-        this.error = e;
-      }
+    try {
+      this.snippet = await dailySnippetModel.updateDailySnippet(this.snippet.id, {
+        snippet: newSnippet,
+      });
+      this.$refs.editor.saveCompleted();
+    } catch(e) {
+      this.error = e;
     }
-    contentInput.disabled = false;
   }
 
   // Hooks
@@ -66,19 +62,23 @@ export default class DailySnippetPage extends DailySnippetPageProps {
   render(): VNode {
     const elements: VNode[] = [];
     if (this.snippet) {
-      elements.push(this.$createElement('h2', "Daily Snippet: " + toDateString(this.snippet)));
-      elements.push(this.$createElement('textarea', {
-        ref: 'content',
-        attrs: {
-          id: 'content',
+      const date = convertDayToDate(this.snippet.day, this.snippet.year);
+      const absoluteDateString = date.toLocaleDateString();
+      const relativeDateString = toRelativeDate(date);
+      let dateString = absoluteDateString;
+      if (relativeDateString != absoluteDateString) {
+        dateString += " (" + relativeDateString +")";
+      }
+      elements.push(this.$createElement('h2', "Daily Snippet: " + dateString));
+      elements.push(this.$createElement('editor', {
+        ref: 'editor',
+        props: {
+          snippet: this.snippet.snippet,
         },
-      }, this.snippet.snippet));
-      elements.push(this.$createElement('br'));
-      elements.push(this.$createElement('button', {
         on: {
-          click: this.saveContent,
+          save: this.save,
         },
-      }, 'Save'));
+      }));
     } else if (this.error) {
       elements.push(this.$createElement('p', this.error.message));
     } else {
