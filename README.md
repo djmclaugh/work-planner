@@ -1,6 +1,8 @@
 # Work Planner
 Simple web app to help organize your day and week.
 
+Note: This is work in progress with limited support.
+
 # Intallation
 
 How to install:
