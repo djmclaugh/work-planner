@@ -15,5 +15,5 @@ How to use:
 Note: On Windows, the server is run as a background process. If you want to stop it, you'll have to do it via the task manager. The process will be called `Node.js: Server-side JavaScript`.
 
 Miscellaneous:
-* You can change the port number and database by updating server/confing_default.json (you'll also have to update client/config_default if you change the port number)
+* You can change the port number and database by updating `server/confing_default.json` (you'll also have to update `client/config_default` if you change the port number)
 * By default, your data is stored in a SQLite database file called `workplanner.db`. This file contains all of your user data. You can backup your data by simply making a copy of this file and saving it somewhere else.
