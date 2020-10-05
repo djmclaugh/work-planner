@@ -7,7 +7,7 @@ Note: This is work in progress with limited support.
 
 How to install:
 1. Make sure that Node.js is installed on your computer. You can find it here: https://nodejs.org.
-2. Download this repository on your computer. You can either use Git or use the green "Code" button on the top right to download a .zip file (don't forget to extract the .zip file after you download it).
+2. Download this repository on your computer. You can either use Git or use the green "Code" button on the top right of this page to download a .zip file (don't forget to extract the .zip file after you download it).
 3. If you are on Linux or Mac, open the terminal, cd into the repository and run `npm install`. If you are on Windows, go to the `Windows` folder and run `install.bat`.
 
 How to use:
