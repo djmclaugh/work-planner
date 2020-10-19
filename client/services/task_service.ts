@@ -2,10 +2,10 @@ import { get, post, put } from './request_service';
 
 import { Task, TaskUpdate } from '../../shared/entities/task';
 
-const COLLECTION_PATH = '/api/task';
-const SINGLETON_PATH = '/api/task/:taskID';
-const LOG_COLLECTION_PATH = '/api/task/:taskID/log';
-const LOG_SINGLETON_PATH = '/api/task/:taskID/log/:logID';
+const COLLECTION_PATH = 'api/task';
+const SINGLETON_PATH = 'api/task/:taskID';
+const LOG_COLLECTION_PATH = 'api/task/:taskID/log';
+const LOG_SINGLETON_PATH = 'api/task/:taskID/log/:logID';
 
 function singletonPath(taskId: number): string {
   return SINGLETON_PATH.replace(':taskID', taskId.toString());

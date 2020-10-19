@@ -24,7 +24,14 @@ export function call(method: 'GET'|'POST'|'PUT'|'DELETE', path: string, req?: an
       res.on('end', () => {
         if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
           if (response.length > 0) {
-            resolve(JSON.parse(response));
+            try {
+              resolve(JSON.parse(response));
+            } catch(e) {
+              console.error(`Error while fetching ${method} at ${path}`);
+              console.error('Failed to parse following object:');
+              console.error(response);
+              reject(e);
+            }
           } else {
             resolve("");
           }

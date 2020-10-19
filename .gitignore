@@ -6,4 +6,7 @@ client/**/*.js
 server/**/*.js
 shared/**/*.js
 
+client/config.json
+server/config.json
+
 public/bundle.js

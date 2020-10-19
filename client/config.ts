@@ -9,8 +9,12 @@ export interface Config {
   server: ServerConfig,
 }
 
-// import * as configObject from './config.json';
-import * as configObject from './config_default.json';
+let configObject;
+try {
+  configObject = require('./config.json');
+} catch(e) {
+  configObject = require('./config_default.json');
+}
 
 const chosenConfig = validateConfig(configObject);
 

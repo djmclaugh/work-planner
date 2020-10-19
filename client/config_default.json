@@ -1,8 +1,8 @@
 {
   "server": {
-    "https": true,
-    "hostname": "server.home",
-    "base": "/work/",
-    "port": 443
+    "https": false,
+    "hostname": "localhost",
+    "base": "/",
+    "port": 8080
   }
 }

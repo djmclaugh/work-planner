@@ -2,8 +2,8 @@ import { get, post, put } from './request_service';
 
 import { DailySnippet } from '../../shared/entities/snippet';
 
-const COLLECTION_PATH = '/api/daily';
-const SINGLETON_PATH = '/api/daily/:snippetID';
+const COLLECTION_PATH = 'api/daily';
+const SINGLETON_PATH = 'api/daily/:snippetID';
 
 function singletonPath(snippetId: number): string {
   return SINGLETON_PATH.replace(':snippetID', snippetId.toString());
