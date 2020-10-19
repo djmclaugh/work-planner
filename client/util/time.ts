@@ -25,10 +25,10 @@ export function toRelativeDate(date: Date): string {
   if (dateMoment.isSame(nowMoment, 'day')) {
     return "Today";
   }
-  if (dateMoment.isSame(nowMoment.add(-1, 'day'), 'day')) {
+  if (dateMoment.isSame(nowMoment.clone().add(-1, 'day'), 'day')) {
     return "Yesterday";
   }
-  if (dateMoment.isSame(nowMoment.add(1, 'day'), 'day')) {
+  if (dateMoment.isSame(nowMoment.clone().add(1, 'day'), 'day')) {
     return "Tomorrow";
   }
   if (dateMoment.isSame(nowMoment, 'week')) {
@@ -38,10 +38,10 @@ export function toRelativeDate(date: Date): string {
       return "This coming " + dayToString(dateMoment.day());
     }
   }
-  if (dateMoment.isSame(nowMoment.add(-1, 'week'), 'week')) {
+  if (dateMoment.isSame(nowMoment.clone().add(-1, 'week'), 'week')) {
     return "Last " + dayToString(dateMoment.day());
   }
-  if (dateMoment.isSame(nowMoment.add(1, 'week'), 'week')) {
+  if (dateMoment.isSame(nowMoment.clone().add(1, 'week'), 'week')) {
     return "Next " + dayToString(dateMoment.day());
   }
   return date.toLocaleDateString();

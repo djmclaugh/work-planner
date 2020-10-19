@@ -14,7 +14,7 @@ export interface TaskUpdate {
 }
 
 function isBeforeNow(timestamp: number) {
-  return timestamp < (new Date()).getTime();
+  return timestamp + (1000 * 60 * 60 * 24) < (new Date()).getTime();
 }
 
 export function isOverdue(task: Task): boolean {

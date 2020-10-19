@@ -1,6 +1,7 @@
 import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
+import { toRelativeDate } from '../util/time';
 import { Task, status } from '../../shared/entities/task';
 
 const TaskProps = Vue.extend({
@@ -28,6 +29,11 @@ export default class TaskComponent extends TaskProps {
     elements.push(this.$createElement('b', this.task.description));
     elements.push(this.$createElement('br'));
     elements.push(this.$createElement('span', 'Status: ' + status(this.task)));
+    if (this.task.dueDate) {
+      elements.push(this.$createElement('br'));
+      elements.push(this.$createElement('span', 'Due: ' + toRelativeDate(new Date(this.task.dueDate))));
+    }
+
 
     return this.$createElement('router-link', {
       class: {
