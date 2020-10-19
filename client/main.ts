@@ -12,9 +12,14 @@ import TasksPage from './pages/tasks_page';
 import WeeklySnippetPage from './pages/weekly_snippet_page';
 import WeeklySnippetsPage from './pages/weekly_snippets_page';
 
+import { getConfig, ServerConfig } from './config';
+
+const config = getConfig().server;
+
 Vue.use(VueRouter);
 
 const router = new VueRouter({
+  base: config.base,
   mode: 'history',
   routes: [
     { path: '/', component: LandingPage },

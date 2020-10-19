@@ -11,7 +11,7 @@ export function call(method: 'GET'|'POST'|'PUT'|'DELETE', path: string, req?: an
     const clientRequest = client.request({
       hostname: config.hostname,
       port: config.port,
-      path: path,
+      path: config.base + path,
       method: method,
       headers: {
         'Content-Type': 'application/json',

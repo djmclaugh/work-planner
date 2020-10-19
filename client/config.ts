@@ -1,6 +1,7 @@
 export interface ServerConfig {
   https: boolean,
   hostname: string,
+  base: string,
   port: number,
 }
 
@@ -24,6 +25,12 @@ function validateServerConfig(serverConfig: any): ServerConfig {
   }
   const hostname: string = serverConfig.hostname;
 
+
+  if (typeof serverConfig.base !== 'string') {
+    throw new Error('base path for server needs to be specified');
+  }
+  const base: string = serverConfig.base;
+
   if (!serverConfig.port || !Number.isInteger(serverConfig.port)) {
     throw new Error('A port number for the server needs to be specified.');
   }
@@ -32,6 +39,7 @@ function validateServerConfig(serverConfig: any): ServerConfig {
   return {
     https: https,
     hostname: hostname,
+    base: base,
     port: port,
   }
 }

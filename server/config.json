@@ -1,0 +1,7 @@
+{
+  "port": 8085,
+  "database": {
+    "type": "sqlite",
+    "location": "workplanner.db"
+  }
+}
