@@ -56,10 +56,10 @@ export function toRelativeWeek(date: Date): string {
   if (dateMoment.isSame(nowMoment, 'week')) {
     return "This week";
   }
-  if (dateMoment.isSame(nowMoment.add(-1, 'week'), 'week')) {
+  if (dateMoment.isSame(nowMoment.clone().add(-1, 'week'), 'week')) {
     return "Last week";
   }
-  if (dateMoment.isSame(nowMoment.add(1, 'week'), 'week')) {
+  if (dateMoment.isSame(nowMoment.clone().add(1, 'week'), 'week')) {
     return "Next week";
   }
   return "Week of " + date.toLocaleDateString();
