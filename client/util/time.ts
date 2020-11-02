@@ -1,3 +1,4 @@
+// TODO(djmclaugh): Move away from moment since it is deprecated.
 import moment = require('moment');
 
 export function timestampToString(timestamp: number): string {
@@ -14,6 +15,17 @@ export function timestampToDate(timestamp: number): string {
   }
   const date = new Date(timestamp);
   return date.toLocaleDateString();
+}
+
+export function isPastDate(date: Date): boolean {
+  const now = new Date();
+  if (date.getFullYear() == now.getFullYear()) {
+    if (date.getMonth() == now.getMonth()) {
+      return date.getDate() < now.getDate();
+    }
+    return date.getMonth() < now.getMonth();
+  }
+  return date.getFullYear() < now.getFullYear();
 }
 
 export function toRelativeDate(date: Date): string {

@@ -82,6 +82,7 @@ export default class TasksPage extends TasksPageProps {
       const overdueTasks: Task[] = [];
       const inProgressTasks: Task[] = [];
       const completedTasks: Task[] = [];
+      const upcomingTasks: Task[] = [];
 
       for (let task of this.tasks) {
         switch(status(task)) {
@@ -97,28 +98,53 @@ export default class TasksPage extends TasksPageProps {
           case "In Progress":
             inProgressTasks.push(task);
             break;
+          case "Upcoming":
+            upcomingTasks.push(task);
+            break;
           default:
             pendingTasks.push(task);
         }
       }
 
       if (overdueTasks.length > 0) {
+        overdueTasks.sort((a, b) => {
+          return a.dueDate - b.dueDate;
+        });
         elements.push(this.$createElement('h2', 'Overdue:'));
         elements = elements.concat(overdueTasks.map(this.taskToComponent));
       }
 
       if (inProgressTasks.length > 0) {
+        inProgressTasks.sort((a, b) => {
+          return a.dueDate - b.dueDate;
+        });
         elements.push(this.$createElement('h2', 'In Progress:'));
         elements = elements.concat(inProgressTasks.map(this.taskToComponent));
       }
 
+      if (upcomingTasks.length > 0) {
+        upcomingTasks.sort((a, b) => {
+          const aTime = a.startDate === 0 ? a.dueDate : a.startDate;
+          const bTime = b.startDate === 0 ? b.dueDate : b.startDate;
+          return aTime - bTime;
+        });
+        elements.push(this.$createElement('h2', 'Upcoming:'));
+        elements = elements.concat(upcomingTasks.map(this.taskToComponent));
+      }
+
       if (pendingTasks.length > 0) {
+        pendingTasks.sort((a, b) => {
+          return a.dueDate - b.dueDate;
+        });
         elements.push(this.$createElement('h2', 'Pending:'));
         elements = elements.concat(pendingTasks.map(this.taskToComponent));
       }
 
       if (completedTasks.length > 0) {
-        elements.push(this.$createElement('h2', 'Completed:'));
+        inProgressTasks.sort((a, b) => {
+          return a.completionDate - b.completionDate;
+        });
+        elements.push(this.$createElement('h2', 'Recently Completed:'));
         elements = elements.concat(completedTasks.map(this.taskToComponent));
       }
     } else {

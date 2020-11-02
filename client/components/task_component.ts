@@ -1,7 +1,7 @@
 import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
-import { toRelativeDate } from '../util/time';
+import { toRelativeDate, isPastDate } from '../util/time';
 import { Task, status } from '../../shared/entities/task';
 
 const TaskProps = Vue.extend({
@@ -27,11 +27,33 @@ export default class TaskComponent extends TaskProps {
   render(): VNode {
     const elements: VNode[] = [];
     elements.push(this.$createElement('b', this.task.description));
-    elements.push(this.$createElement('br'));
-    elements.push(this.$createElement('span', 'Status: ' + status(this.task)));
-    if (this.task.dueDate) {
-      elements.push(this.$createElement('br'));
-      elements.push(this.$createElement('span', 'Due: ' + toRelativeDate(new Date(this.task.dueDate))));
+    switch(status(this.task)) {
+      case 'Completed': {
+        elements.push(this.$createElement('br'));
+        elements.push(this.$createElement('span', 'Completed: ' + toRelativeDate(new Date(this.task.completionDate))));
+        break;
+      }
+      case 'Overdue': {
+        elements.push(this.$createElement('br'));
+        elements.push(this.$createElement('span', 'Due: ' + toRelativeDate(new Date(this.task.dueDate))));
+        break;
+      }
+      case 'In Progress': {
+        elements.push(this.$createElement('br'));
+        elements.push(this.$createElement('span', 'Due: ' + toRelativeDate(new Date(this.task.dueDate))));
+        break;
+      }
+      case 'Upcoming': {
+        if (this.task.startDate) {
+          elements.push(this.$createElement('br'));
+          elements.push(this.$createElement('span', 'Starting: ' + toRelativeDate(new Date(this.task.startDate))));
+        }
+        if (this.task.dueDate) {
+          elements.push(this.$createElement('br'));
+          elements.push(this.$createElement('span', 'Due: ' + toRelativeDate(new Date(this.task.dueDate))));
+        }
+        break;
+      }
     }
 
 
