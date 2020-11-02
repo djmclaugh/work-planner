@@ -181,16 +181,12 @@ export default class TasksPage extends TasksPageProps {
         elements.push(radioGroup);
         elements.push(this.$createElement('br'));
         const now = new Date();
-        console.log(this.completedHistoryLength);
         const filtered = completedTasks.filter((t) => {
           if (this.completedHistoryLength === 0) {
             return true;
           }
-          console.log(new Date(t.completionDate));
-          console.log(numberOfDays(new Date(t.completionDate), now));
           return numberOfDays(new Date(t.completionDate), now) < this.completedHistoryLength
         });
-        console.log(filtered);
         elements = elements.concat(filtered.map(this.taskToComponent));
       }
     } else {
