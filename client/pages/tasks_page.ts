@@ -2,8 +2,10 @@ import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
 import TaskComponent from '../components/task_component';
+import RadioGroupComponent from '../components/shared/radio_group';
 
 import { Task, status } from '../../shared/entities/task';
+import { numberOfDays } from '../util/time';
 import TaskModel from '../models/task_model';
 
 const taskModel = TaskModel.getSingleton();
@@ -14,6 +16,7 @@ const TasksPageProps = Vue.extend({
 
 @Component({
   components: {
+    radioGroup: RadioGroupComponent,
     task: TaskComponent,
   },
 })
@@ -25,6 +28,7 @@ export default class TasksPage extends TasksPageProps {
 
   // Data
   tasks: Task[]|null = null;
+  completedHistoryLength: number = 7;
 
   // Computed
 
@@ -50,6 +54,10 @@ export default class TasksPage extends TasksPageProps {
 
   taskToComponent(task: Task): VNode {
     return this.$createElement('task', { props: {taskProp: task} })
+  }
+
+  processHistorySizeChange(newValue: string): void {
+    this.completedHistoryLength = parseInt(newValue);
   }
 
   // Hooks
@@ -144,8 +152,46 @@ export default class TasksPage extends TasksPageProps {
         inProgressTasks.sort((a, b) => {
           return a.completionDate - b.completionDate;
         });
+        const radioGroup = this.$createElement('radioGroup', {
+          class: {
+            flex: true,
+          },
+          props: {
+            name: 'history_size',
+            legend: 'Show tasks completed:',
+            values: [
+              '1',
+              '7',
+              '31',
+              '0',
+            ],
+            valueDisplayNames: [
+              'today',
+              'within the last 7 days',
+              'within the last 30 days',
+              'whenever'
+            ],
+            initialValue: '' + this.completedHistoryLength,
+          },
+          on: {
+            change: this.processHistorySizeChange,
+          }
+        });
         elements.push(this.$createElement('h2', 'Recently Completed:'));
-        elements = elements.concat(completedTasks.map(this.taskToComponent));
+        elements.push(radioGroup);
+        elements.push(this.$createElement('br'));
+        const now = new Date();
+        console.log(this.completedHistoryLength);
+        const filtered = completedTasks.filter((t) => {
+          if (this.completedHistoryLength === 0) {
+            return true;
+          }
+          console.log(new Date(t.completionDate));
+          console.log(numberOfDays(new Date(t.completionDate), now));
+          return numberOfDays(new Date(t.completionDate), now) < this.completedHistoryLength
+        });
+        console.log(filtered);
+        elements = elements.concat(filtered.map(this.taskToComponent));
       }
     } else {
       elements.push(this.$createElement('p', 'Loading Tasks...'));

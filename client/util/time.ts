@@ -28,6 +28,27 @@ export function isPastDate(date: Date): boolean {
   return date.getFullYear() < now.getFullYear();
 }
 
+export function numberOfDays(a: Date, b: Date): number {
+  if (a.getTime() > b.getTime()) {
+    return -numberOfDays(b, a);
+  }
+  let difference = 0;
+  let year = b.getFullYear();
+  let month = b.getMonth();
+  let date = b.getDate();
+  while (year > a.getFullYear() || month > a.getMonth()) {
+    difference += date;
+    date = (new Date(year, month, 0)).getDate();
+    month -= 1;
+    if (month < 0) {
+      month = 11;
+      year -= 1;
+    }
+  }
+  difference += date - a.getDate();
+  return difference;
+}
+
 export function toRelativeDate(date: Date): string {
   if (!date) {
     return "--";

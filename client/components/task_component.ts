@@ -1,7 +1,7 @@
 import Vue, { VNode } from 'vue';
 import Component from 'vue-class-component';
 
-import { toRelativeDate, isPastDate } from '../util/time';
+import { toRelativeDate } from '../util/time';
 import { Task, status } from '../../shared/entities/task';
 
 const TaskProps = Vue.extend({

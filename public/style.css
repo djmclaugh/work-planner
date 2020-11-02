@@ -97,3 +97,14 @@ body {
   min-width: 50%;
   min-height: 200px;
 }
+
+fieldset.flex {
+  max-width: max-content;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+fieldset label {
+  padding-left: 8px;
+  padding-right: 8px;
+}
