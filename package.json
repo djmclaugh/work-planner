@@ -45,5 +45,10 @@
     "typescript": "^4.0.2",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
+  },
+  "bin": "server/main.js",
+  "pkg": {
+    "scripts": "server/config_default.json",
+    "assets": ["public/**/*"]
   }
 }

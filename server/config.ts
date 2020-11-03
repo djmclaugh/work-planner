@@ -6,6 +6,7 @@ interface DatabaseConfig {
 }
 
 export interface Config {
+  host: string,
   port: number,
   database: DatabaseConfig,
 }
@@ -38,6 +39,11 @@ function validateDatabase(dbConfig: any): DatabaseConfig {
 }
 
 function validateConfig(config: any): Config {
+  if (!config.host || typeof(config.host) !== 'string') {
+    throw new Error("A host has to be specified. See config_default.json for an example.");
+  }
+  const host: string = config.host;
+
   if (!config.port || !Number.isInteger(config.port)) {
     throw new Error("A port number has to be specified. See config_default.json for an example.");
   }
@@ -48,6 +54,7 @@ function validateConfig(config: any): Config {
   }
 
   return {
+    host: host,
     port: port,
     database: validateDatabase(config.database),
   }

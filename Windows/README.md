@@ -1,11 +1,12 @@
 # Windows
-This directory contains simple scripts to instal and run this project on a Windows machine.
+Compiled versions of work planner created using pkg (https://github.com/vercel/pkg#readme).
 
-Note, these scripts assume that Node.js is already installed on your computer and will fail if that's not the case.
-You can download Node.js here: https://nodejs.org/
+# How to run
 
-## install.bat
-This simply runs `npm install` to download the dependencies for this project and compiles/bundles the typescript files into usuable javascript files. This only has to be run once.
+Download this whole folder (both the `.exe` and the `.node` need to be in the same folder).
 
-## run.vbs
-Starts the server as a background process. To stop the server, open the Task Manager and end the `Node.js: Server-side JavaScript` task.
+Simply double click the `.exe` and this will open a window and start the web server on port 8080. You can then access the application with your browser of choice by navigating to `http://localhost:8080`. You can stop the server by closing the window.
+
+A database file name `workplanner.db` will be created in the same folder as the `.exe`. This fill will contain all of your user data.
+
+Note: You might prefer running the server in the background without a window polluting your taskbar. You can find different options to do this here: https://superuser.com/questions/43206/how-can-i-hide-an-application-from-the-windows-taskbar

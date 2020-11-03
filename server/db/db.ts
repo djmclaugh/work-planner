@@ -20,9 +20,11 @@ export function onConnect(cb: (connection: Connection) => void) {
   }
 }
 
+const location = dbConfig.location;
+
 createConnection({
   type: dbConfig.type,
-  database: dbConfig.location,
+  database: location,
   entities: [
     DailySnippetModel,
     SampleModel,
@@ -32,7 +34,7 @@ createConnection({
   ],
   synchronize: true,
 }).then(c => {
-  console.log(`Successfully connected to ${dbConfig.type} database at ${dbConfig.location}.`);
+  console.log(`Successfully connected to ${dbConfig.type} database at ${location}.`);
   connection = c;
   for (const cb of callbacks) {
     cb(connection);

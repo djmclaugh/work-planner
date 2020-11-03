@@ -1,3 +1,4 @@
+import path from 'path';
 import Koa from 'koa';
 import send from 'koa-send';
 import serve from 'koa-static';
@@ -8,9 +9,11 @@ import { router } from './router/router';
 
 const config: Config = getConfig();
 
+const publicPath = path.join(__dirname, '../public');
+
 // Start server
 const app = new Koa();
-app.use(serve('public'));
+app.use(serve(publicPath));
 app.use(router.routes());
 // GET catch-all to support Vue's Router
 app.use(async (ctx) => {
@@ -20,6 +23,6 @@ app.use(async (ctx) => {
 });
 
 onConnect(async () => {
-  app.listen(config.port);
-  console.log(`Started 'Work Planner' server on port ${ config.port }.`);
+  app.listen(config.port, config.host);
+  console.log(`Started 'Work Planner' server at http://${ config.host }:${ config.port }`);
 });
